@@ -1,0 +1,20 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>ZKG Counter Upload – Setup</title>
+<link rel="stylesheet" href="styles.css"></head>
+<body class="container">
+<h1>Setup – ZKG Counter Upload</h1>
+<ol>
+<li><b>Google Sheet</b>: use the Sheet ID <code>1Mq88NZUs6rIsbQFGmR_4koqxZofYeFS063-S81GtShk</code> and ensure a tab named <code>Counters</code> with columns:
+  <pre>A:Team Member 1 ... E:Team Member 5, F:Counter Character 1 ... J:Counter Character 5, K:Season, L:ROOM, M:PUNCHUP OR DOWN, N:TCP TEAM, O:TCP COUNTER, P:TCP Difference, Q:Victory Points, S:(Notes)</pre>
+</li>
+<li><b>Apps Script Backend</b>: create a new Google Apps Script attached to the Sheet and paste the provided <code>Code.gs</code>. Deploy as <i>Web app</i> with <i>Anyone with the link</i> (or your preferred auth). Copy the deployment URL.</li>
+<li><b>Frontend Config</b>: open <code>script.js</code> and set <code>CONFIG.backendUrl</code> to that Apps Script URL. Commit/push to GitHub Pages.</li>
+<li>(Optional) <b>Portrait matching</b>:
+  <ul>
+    <li>Place character portraits in <code>/portraits</code> (PNG/JPG). Use character names as file names.</li>
+    <li>Open <code>tools/hash-builder.html</code> in your browser, click <i>Build Hashes</i>, then <i>Download JSON</i>. Save as <code>portraits_hash.json</code> in the project root.</li>
+  </ul>
+</li>
+</ol>
+<p>On the site, click <b>Upload Screenshot</b>. While processing, you’ll see a subtle glowing <i>Uploading</i> message. When done, it changes to <i>Completed</i>, waits 5 seconds, then auto-refreshes for the next upload.</p>
+</body></html>

@@ -1,0 +1,50 @@
+/* MSF-ish dark theme with subtle emerald + charcoal */
+:root{
+  --bg:#0c1117;
+  --panel:#121826;
+  --ink:#e6edf3;
+  --muted:#9fb0c0;
+  --accent:#14b8a6; /* teal/emerald */
+  --accent-soft: rgba(20,184,166,.25);
+  --glow: 0 0 24px rgba(20,184,166,.35);
+  --red:#ef4444;
+  --green:#22c55e;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+a{color:var(--accent)}
+
+.app-header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0c1117 0%,rgba(12,17,23,.7) 100%);backdrop-filter:blur(6px);border-bottom:1px solid #1f2a3a;padding:16px 20px}
+.app-header h1{margin:0;font-size:28px;letter-spacing:.5px;text-shadow:var(--glow)}
+.app-header .sub{margin:4px 0 0;color:var(--muted)}
+
+.container{max-width:980px;margin:28px auto;padding:0 16px}
+.panel{background:var(--panel);border:1px solid #1f2a3a;border-radius:16px;padding:16px;box-shadow:0 6px 28px rgba(0,0,0,.35)}
+.controls{display:flex;align-items:center;gap:12px}
+.status{margin-left:auto;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.05);color:var(--muted);min-width:120px;text-align:center}
+.status.glow{box-shadow:var(--glow);background:var(--accent-soft);color:#d7fffb}
+
+.btn{padding:10px 16px;border-radius:12px;border:1px solid #234;cursor:pointer;font-weight:600;transition:.15s}
+.btn.primary{background:linear-gradient(180deg,#19c3b1, #0ea5a3);color:#062b2b;box-shadow:var(--glow)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+
+.preview{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.preview img{width:100%;border-radius:12px;border:1px solid #243244}
+
+.meta{margin-top:8px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(140px,1fr));gap:8px}
+.grid label{display:flex;flex-direction:column;font-size:12px;color:var(--muted)}
+.grid input{margin-top:4px;background:#0a0f16;color:var(--ink);border:1px solid #223040;border-radius:8px;padding:8px}
+
+.howto{margin-top:22px}
+.howto h2{margin:0 0 8px}
+.note{color:var(--muted)}
+
+.app-footer{opacity:.8;color:var(--muted);text-align:center;padding:24px}
+.glowmsg{animation:pulse 1.2s ease-in-out infinite alternate}
+@keyframes pulse{from{text-shadow:0 0 8px rgba(20,184,166,.35)}to{ text-shadow:0 0 18px rgba(20,184,166,.75)}}
+.badge{padding:2px 8px;border-radius:999px;border:1px solid #2a3a4a;font-size:12px}
+.badge.up{color:var(--red);background:rgba(239,68,68,.12)}
+.badge.down{color:var(--green);background:rgba(34,197,94,.12)}

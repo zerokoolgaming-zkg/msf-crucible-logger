@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZKG Counter Upload</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>ZKG Counter Upload</h1>
+    <p class="sub">Upload a Crucible result screenshot — we’ll parse, compute, and send to your Google Sheet.</p>
+  </header>
+
+  <main class="container">
+    <div class="panel">
+      <div class="controls">
+        <button id="uploadBtn" class="btn primary">Upload Screenshot</button>
+        <input id="fileInput" type="file" accept="image/*" multiple hidden>
+        <span id="status" class="status">Idle</span>
+      </div>
+
+      <div id="preview" class="preview"></div>
+
+      <div class="meta">
+        <details>
+          <summary>Optional metadata (used when OCR can’t determine it)</summary>
+          <div class="grid">
+            <label>Season <input id="season" type="number" placeholder="e.g., 18"></label>
+            <label>Room <input id="room" type="number" placeholder="e.g., 2"></label>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <section class="howto">
+      <h2>How this works</h2>
+      <ol>
+        <li>Click <b>Upload Screenshot</b>. You can select one or more images.</li>
+        <li>We OCR the screenshot to pull totals (Attack vs Defense), VP, etc.</li>
+        <li>We compute Punchup / Punchdown and TCP Diff.</li>
+        <li>We POST a row to your Google Sheet (tab <code>Counters</code>).</li>
+      </ol>
+      <p class="note">Heads-up: automatic character-name detection from portraits is best-effort. For high accuracy, build a portrait hash via the <a href="tools/hash-builder.html" target="_blank">Hash Builder</a> and include it as <code>portraits_hash.json</code>.</p>
+    </section>
+  </main>
+
+  <footer class="app-footer">© 2025 ZKG • <a href="README.html" target="_blank">Setup Guide</a></footer>
+</body>
+</html>

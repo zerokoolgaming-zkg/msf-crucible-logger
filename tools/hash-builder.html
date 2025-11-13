@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portrait Hash Builder</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script defer src="hash-builder.js"></script>
+</head>
+<body class="container">
+  <h1>Portrait Hash Builder</h1>
+  <p>Loads all images from <code>/portraits</code> in this repo and builds a perceptual-hash JSON for fast matching.</p>
+  <div class="panel">
+    <button id="build" class="btn primary">Build Hashes</button>
+    <button id="download" class="btn" disabled>Download JSON</button>
+    <span id="msg" class="status">Idle</span>
+  </div>
+  <div id="out" class="preview" style="margin-top:12px"></div>
+</body>
+</html>
