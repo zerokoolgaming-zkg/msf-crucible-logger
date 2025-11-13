@@ -3,7 +3,7 @@
 
 const CONFIG = {
   // 1) Google Apps Script Web App URL (deploy as "Anyone with link")
-  GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec",
+  GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzYGvS7VYq8lEG9MAW3r_NXVc9iBNKduWVGbbq2KnlVo-HZfj9KlAyOEtQN7TesmhU72Q/exec",
 
   // 2) Default season if OCR can't detect it (you can change in the UI anyway)
   DEFAULT_SEASON: "Season 18",
