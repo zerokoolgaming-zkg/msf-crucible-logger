@@ -1,52 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZKG Counter Upload</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8" />
+  <title>MSF Crucible Screenshot Uploader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Tesseract.js for on-device OCR (no cloud account needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 </head>
 <body>
-  <header class="app-header">
-    <h1>ZKG Counter Upload</h1>
-    <p class="sub">Upload a Crucible result screenshot — we’ll parse, compute, and send to your Google Sheet.</p>
+  <div class="page-bg"></div>
+  <header class="mf-header">
+    <div class="mf-logo">COSMIC CRUCIBLE LOGGER</div>
+    <div class="mf-subtitle">Marvel Strike Force inspired · GitHub + Google Sheets</div>
   </header>
 
-  <main class="container">
-    <div class="panel">
-      <div class="controls">
-        <button id="uploadBtn" class="btn primary">Upload Screenshot</button>
-        <input id="fileInput" type="file" accept="image/*" multiple hidden>
-        <span id="status" class="status">Idle</span>
+  <main class="mf-main">
+    <section class="mf-card">
+      <h1>Upload Crucible Screenshot</h1>
+      <p class="mf-text">
+        1. Take a full-stage results screenshot (like your example).<br/>
+        2. Upload it here. The page will try to read the stage, team power, victory points,
+        and match each character portrait to your PNG library hosted on GitHub.<br/>
+        3. Review / adjust the data, then send it to your Google Sheet.
+      </p>
+
+      <div class="upload-row">
+        <label class="mf-button">
+          <input type="file" id="screenshotInput" accept="image/*" hidden />
+          Choose Screenshot
+        </label>
+        <button class="mf-button secondary" id="processBtn" disabled>Process Screenshot</button>
       </div>
 
-      <div id="preview" class="preview"></div>
+      <div id="statusBar" class="status-bar hidden"></div>
 
-      <div class="meta">
-        <details>
-          <summary>Optional metadata (used when OCR can’t determine it)</summary>
-          <div class="grid">
-            <label>Season <input id="season" type="number" placeholder="e.g., 18"></label>
-            <label>Room <input id="room" type="number" placeholder="e.g., 2"></label>
+      <div class="preview-area">
+        <div class="preview-left">
+          <h2>Screenshot Preview</h2>
+          <canvas id="previewCanvas"></canvas>
+        </div>
+        <div class="preview-right">
+          <h2>Parsed Data</h2>
+
+          <div class="form-grid">
+            <label>Season
+              <input type="text" id="seasonInput" placeholder="Season 18" />
+            </label>
+            <label>Stage Name
+              <input type="text" id="stageNameInput" placeholder="Stage 3 Judgments" />
+            </label>
+            <label>Room #
+              <input type="number" id="roomInput" placeholder="3" />
+            </label>
+            <label>Victory Points
+              <input type="number" id="vpInput" />
+            </label>
+            <label>Attack Power (N)
+              <input type="number" id="attackPowerInput" />
+            </label>
+            <label>Defense Power (O)
+              <input type="number" id="defensePowerInput" />
+            </label>
           </div>
-        </details>
-      </div>
-    </div>
 
-    <section class="howto">
-      <h2>How this works</h2>
-      <ol>
-        <li>Click <b>Upload Screenshot</b>. You can select one or more images.</li>
-        <li>We OCR the screenshot to pull totals (Attack vs Defense), VP, etc.</li>
-        <li>We compute Punchup / Punchdown and TCP Diff.</li>
-        <li>We POST a row to your Google Sheet (tab <code>Counters</code>).</li>
+          <h3>Detected Characters</h3>
+          <p class="mf-text small">
+            Columns A–E = Defense (right side). Columns F–J = Attack (left side).<br/>
+            You can edit any name before sending to the sheet.
+          </p>
+
+          <div class="char-lists">
+            <div>
+              <h4>Defense Team (A–E)</h4>
+              <ol id="defenseList" class="char-list"></ol>
+            </div>
+            <div>
+              <h4>Attack Team (F–J)</h4>
+              <ol id="attackList" class="char-list"></ol>
+            </div>
+          </div>
+
+          <div class="computed-row">
+            <label>Punchup / Punchdown (M)
+              <input type="text" id="punchLabel" readonly />
+            </label>
+            <label>TCP Diff (P)
+              <input type="text" id="tcpDiff" readonly />
+            </label>
+            <label>TCP % Diff (S)
+              <input type="text" id="tcpPercent" readonly />
+            </label>
+          </div>
+
+          <button class="mf-button primary" id="sendToSheetBtn" disabled>Send Row to Google Sheet</button>
+          <div id="sendStatus" class="send-status"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mf-card">
+      <h2>How this works (high level)</h2>
+      <ol class="mf-text small">
+        <li>All processing is done in your browser. OCR uses <code>Tesseract.js</code>; portrait matching uses a simple
+            image fingerprint comparison against PNGs you host in this repo under <code>/portraits</code>.</li>
+        <li>After you click “Send Row to Google Sheet”, the site calls your Google Apps Script Web App,
+            which saves the screenshot to Drive and appends a row to your sheet (columns A–T).</li>
+        <li>You can always correct any parsed field before sending, so bad OCR never ruins the sheet.</li>
       </ol>
-      <p class="note">Heads-up: automatic character-name detection from portraits is best-effort. For high accuracy, build a portrait hash via the <a href="tools/hash-builder.html" target="_blank">Hash Builder</a> and include it as <code>portraits_hash.json</code>.</p>
     </section>
   </main>
 
-  <footer class="app-footer">© 2025 ZKG • <a href="README.html" target="_blank">Setup Guide</a></footer>
+  <footer class="mf-footer">
+    Not affiliated with Marvel Strike Force. Built for personal roster tracking.
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
